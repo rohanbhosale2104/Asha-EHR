@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}{{ gettext('patients') }}{% endblock %}
+
+{% block content %}
+<div class="p-3">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fs-3 fw-bold text-dark">{{ gettext('patients') }}</h1>
+        {% if session.get('user_role') != 'PHC Supervisor' %}
+        <a href="{{ url_for('register_patient') }}" class="btn btn-success rounded-circle shadow-lg" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-user-plus"></i>
+        </a>
+        {% endif %}
+    </header>
+
+    <!-- Search Bar -->
+    <div class="mb-4">
+        <div class="input-group input-group-lg">
+            <span class="input-group-text bg-white border-end-0 rounded-start-3"><i class="fas fa-search text-secondary"></i></span>
+            <input type="text" id="patientSearch" placeholder="{{ gettext('search_patients') }}"
+                class="form-control border-start-0 rounded-end-3" style="height: 50px;" onkeyup="filterPatients()">
+        </div>
+    </div>
+    
+    <p class="fs-6 fw-semibold text-dark mb-4">{{ gettext('total_patients') }}: <span id="totalPatients">{{ patients | length }}</span></p>
+
+    {% if patients %}
+        <!-- Patient List -->
+        <div class="list-group" id="patientList">
+            {% for patient in patients %}
+            <a href="#" class="list-group-item list-group-item-action rounded-3 mb-2 shadow-sm d-flex justify-content-between align-items-center" 
+               onclick="showPatientModal('{{ patient.id }}', '{{ patient.name }}', '{{ patient.age }}', '{{ patient.gender }}', '{{ patient.contact }}', '{{ patient.status }}')">
+                <div>
+                    <p class="mb-0 fw-semibold text-dark">{{ patient.name }}</p>
+                    <p class="mb-0 small text-secondary">{{ gettext('patient_id') }}: {{ patient.id }} | {{ gettext('status') }}: <span class="badge text-bg-{% if patient.status == 'ANC Due' %}warning{% elif patient.status == 'Newborn' %}info{% else %}secondary{% endif %}">{{ patient.status }}</span></p>
+                </div>
+                <i class="fas fa-chevron-right text-muted"></i>
+            </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="d-flex flex-column align-items-center justify-content-center text-center p-5 bg-white rounded-3 shadow-sm" style="min-height: 40vh;">
+            <i class="fas fa-user-friends text-muted opacity-50 mb-4" style="font-size: 4rem;"></i>
+            <p class="fs-5 text-secondary mb-4">{{ gettext('no_patients') }}</p>
+            {% if session.get('user_role') != 'PHC Supervisor' %}
+            <a href="{{ url_for('register_patient') }}" class="btn btn-success btn-lg rounded-3 fw-semibold">
+                {{ gettext('add_first_patient') }}
+            </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Patient Detail Modal -->
+<div class="modal fade" id="patientDetailModal" tabindex="-1" aria-labelledby="patientDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="patientDetailModalLabel">{{ gettext('patient_details') }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>{{ gettext('name') }}:</strong> <span id="modalName"></span></p>
+        <p><strong>{{ gettext('age') }}:</strong> <span id="modalAge"></span></p>
+        <p><strong>{{ gettext('gender') }}:</strong> <span id="modalGender"></span></p>
+        <p><strong>{{ gettext('contact') }}:</strong> <span id="modalContact"></span></p>
+        <p><strong>{{ gettext('status') }}:</strong> <span id="modalStatus"></span></p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" id="callPatientBtn" class="btn btn-success"><i class="fas fa-phone-alt"></i> {{ gettext('call') }}</a>
+        <a href="#" id="whatsappPatientBtn" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> {{ gettext('whatsapp') }}</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ gettext('close') }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Filter patients list and update total count
+function filterPatients() {
+    var input = document.getElementById('patientSearch').value.toLowerCase().trim();
+    var items = document.getElementById('patientList').getElementsByTagName('a');
+    var visibleCount = 0;
+
+    for (var i = 0; i < items.length; i++) {
+        var name = items[i].querySelector('p.fw-semibold').textContent.toLowerCase();
+        var id = items[i].querySelector('p.small').textContent.toLowerCase();
+        var status = items[i].querySelector('span.badge').textContent.toLowerCase();
+
+        if (name.includes(input) || id.includes(input) || status.includes(input)) {
+            items[i].style.display = "";
+            visibleCount++;
+        } else {
+            items[i].style.display = "none";
+        }
+    }
+
+    // Update total patients count dynamically
+    document.getElementById('totalPatients').innerText = visibleCount;
+    
+}
+
+// Show patient details in modal
+function showPatientModal(id, name, age, gender, contact, status) {
+    document.getElementById('modalName').innerText = name;
+    document.getElementById('modalAge').innerText = age;
+    document.getElementById('modalGender').innerText = gender;
+    document.getElementById('modalContact').innerText = contact;
+    document.getElementById('modalStatus').innerText = status;
+    document.getElementById('callPatientBtn').href = `tel:${contact}`;
+    document.getElementById('whatsappPatientBtn').href = `https://wa.me/${contact.replace(/\D/g,'')}`;
+    var modal = new bootstrap.Modal(document.getElementById('patientDetailModal'));
+    modal.show();
+}
+</script>
+
+{% endblock %}
