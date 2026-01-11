@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}PHC Staff Login{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column align-items-center justify-content-center min-vh-100 py-4">
+    <div class="text-center mb-5">
+        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3"
+             style="width: 80px; height: 80px;">
+            <i class="fas fa-hospital-user text-white fs-2"></i>
+        </div>
+        <h1 class="fs-4 fw-semibold text-dark">PHC Staff Login</h1>
+        <p class="text-secondary">Primary Health Centre Access</p>
+    </div>
+
+    <div class="w-100" style="max-width: 360px;">
+        <div class="card shadow-lg border-0 rounded-4 p-4">
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <input type="hidden" name="role" value="PHC Supervisor">
+
+                <div class="mb-3">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-4">
+                            <i class="fas fa-user-md text-secondary"></i>
+                        </span>
+                        <input type="text" name="user_id" placeholder="PHC User ID" required
+                               class="form-control border-start-0 rounded-end-4">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-4">
+                            <i class="fas fa-lock text-secondary"></i>
+                        </span>
+                        <input type="password" name="password" placeholder="Password" required
+                               class="form-control border-start-0 rounded-end-4">
+                    </div>
+                </div>
+
+                {% if error %}
+                <p class="text-danger text-center small">{{ error }}</p>
+                {% endif %}
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3 fw-semibold">
+                    Login <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <a href="{{ url_for('login') }}" class="text-decoration-none small">
+                   
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

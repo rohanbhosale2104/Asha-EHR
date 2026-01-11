@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column align-items-center justify-content-center min-vh-100 py-4">
+    <div class="text-center mb-5 mt-n5 mt-md-0">
+        <div class="bg-success rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+            <i class="fas fa-plus text-white fs-2"></i>
+        </div>
+        <h1 class="fs-4 fw-semibold text-dark">Healthcare App</h1>
+        <p class="text-secondary">Empowering Community Health</p>
+    </div>
+
+    <div class="w-100" style="max-width: 360px;">
+        <div class="card shadow-lg border-0 rounded-4 p-4">
+        
+            <div class="btn-group mb-4 p-1 bg-light rounded-3" role="group">
+                <!-- <button type="button" class="btn btn-success fw-medium rounded-3 shadow-sm">
+                    <i class="fas fa-user-friends me-1"></i> ASHA Worker
+                </button>
+                <div class="btn-group mb-4 p-1 bg-light rounded-3" role="group"> -->
+    <button type="button" class="btn btn-success fw-medium rounded-3 shadow-sm">
+        <i class="fas fa-user-friends me-1"></i> ASHA Worker
+    </button>
+
+    <a href="{{ url_for('phc_login') }}"
+       class="btn btn-light text-secondary fw-medium rounded-3">
+        <i class="fas fa-briefcase-medical me-1"></i> PHC Staff
+    </a>
+</div>
+
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <input type="hidden" name="role" value="ASHA Worker">
+                
+                <div class="mb-3">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-4"><i class="fas fa-user text-secondary"></i></span>
+                        <input type="text" id="user_id" name="user_id" placeholder="User ID" required
+                            class="form-control border-start-0 rounded-end-4" style="height: 52px;">
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-4"><i class="fas fa-lock text-secondary"></i></span>
+                        <input type="password" id="password" name="password" placeholder="Password" required
+                            class="form-control border-start-0 rounded-end-4" style="height: 52px;">
+                    </div>
+                </div>
+
+                {% if error %}
+                <p class="text-danger text-center mb-3 small">{{ error }}</p>
+                {% endif %}
+
+                <button type="submit"
+                    class="btn btn-success btn-lg w-100 rounded-3 fw-semibold">
+                    Sign In <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </form>
+
+            <div class="mt-4 p-3 bg-info-subtle border border-info-subtle rounded-3">
+                <h3 class="fs-6 fw-semibold text-info-emphasis">Demo Credentials:</h3>
+                <p class="text-info-emphasis small mb-0">User ID: <span class="fw-bold">demo</span></p>
+                <p class="text-info-emphasis small mb-0">Password: <span class="fw-bold">demo123</span></p>
+            </div>
+        </div>
+    </div>
+    <p class="mt-4 text-secondary text-center small px-4">
+        Healthcare Management App
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+
+{% extends "base.html" %}
+
+{% block title %}Reminders{% endblock %}
+
+{% block content %}
+<div class="p-3">
+    <header class="mb-4">
+        <h1 class="fs-3 fw-bold text-dark">Reminders & Tasks</h1>
+        <p class="text-secondary">Your scheduled visits and pending actions</p>
+    </header>
+
+    <ul class="nav nav-pills nav-justified mb-4" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-due-tab" data-bs-toggle="pill" data-bs-target="#pills-due" type="button" role="tab" aria-controls="pills-due" aria-selected="true">Due (5)</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-completed-tab" data-bs-toggle="pill" data-bs-target="#pills-completed" type="button" role="tab" aria-controls="pills-completed" aria-selected="false">Completed (12)</button>
+        </li>
+    </ul>
+    
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-due" role="tabpanel" aria-labelledby="pills-due-tab" tabindex="0">
+            <!-- Due Reminders List -->
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action border-warning rounded-3 mb-2 shadow-sm d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-0 fw-semibold text-dark">ANC Checkup: Savita Devi</p>
+                        <p class="mb-0 small text-secondary">Due: Today, 10:00 AM</p>
+                    </div>
+                    <span class="badge text-bg-warning">High</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action border-danger rounded-3 mb-2 shadow-sm d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-0 fw-semibold text-dark">Immunization: Baby Girl</p>
+                        <p class="mb-0 small text-secondary">Due: Tomorrow</p>
+                    </div>
+                    <span class="badge text-bg-danger">Urgent</span>
+                </a>
+                <div class="card p-4 text-center text-secondary rounded-3 shadow-sm mt-3">
+                    <p class="mb-0">3 more pending reminders...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="pills-completed" role="tabpanel" aria-labelledby="pills-completed-tab" tabindex="0">
+            <!-- Completed Reminders List -->
+            <div class="card p-4 text-center text-secondary rounded-3 shadow-sm">
+                <p class="mb-0">List of 12 completed tasks will go here.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
